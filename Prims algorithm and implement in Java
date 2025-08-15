@@ -1,0 +1,58 @@
+ import java.util.Arrays;
+
+public class prims {
+    private static final int V = 5; 
+    public static void primMST(int graph[][]) {
+        int[] minWeight = new int[V];
+        boolean[] included = new boolean[V];
+
+        Arrays.fill(minWeight, Integer.MAX_VALUE);
+        minWeight[0] = 0;
+
+        for (int count = 0; count < V - 1; count++) {
+            int u = findMinWeightVertex(minWeight, included);
+
+            included[u] = true;
+
+            for (int v = 0; v < V; v++) {
+                if (graph[u][v] != 0 && !included[v] && graph[u][v] < minWeight[v]) {
+                    minWeight[v] = graph[u][v];
+                }
+            }
+        }
+
+        printMST(minWeight);
+    }
+
+    private static int findMinWeightVertex(int[] minWeight, boolean[] included) {
+        int min = Integer.MAX_VALUE;
+        int minIndex = -1;
+
+        for (int v = 0; v < V; v++) {
+            if (!included[v] && minWeight[v] < min) {
+                min = minWeight[v];
+                minIndex = v;
+            }
+        }
+        return minIndex;
+    }
+
+    private static void printMST(int[] minWeight) {
+        System.out.println("Minimum Spanning Tree:");
+        for (int i = 1; i < V; i++) {
+            System.out.println("Edge: 0 - " + i + " Weight: " + minWeight[i]);
+        }
+    }
+
+    public static void main(String[] args) {
+        int graph[][] = new int[][]{
+                {0, 2, 0, 6, 0},
+                {2, 0, 3, 8, 5},
+                {0, 3, 0, 0, 7},
+                {6, 8, 0, 0, 9},
+                {0, 5, 7, 9, 0}
+        };
+
+        primMST(graph);
+    }
+}
